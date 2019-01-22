@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo2</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="todo_list_module.js"></script>
+</head>
+<body>
+
+<div class="header">
+    <h2>ToDo List</h2>
+</div>
+
+<ul id="myUL">
+</ul>
+
+<script>
+    ToDoListModule.initContainer(document.getElementById("myUL"));
+    ToDoListModule.showTasks();
+</script>
+
+<div style="text-align: center" id="btn_apply_filter"><a href="javascript:PopUpFilterShow()">Filter</a></div>
+<div style="text-align: center" id="btn_new_task"><a href="javascript:PopUpNewTaskShow()">Add</a></div>
+
+<div class="filter-popup" id="popup1">
+    <div class="filter-popup-content">
+        <p><b>Отобразить</b></p>
+        <p><input name="filter_done" type="radio" value="true">Сделанные задачи</p>
+        <p><input name="filter_done" type="radio" value="false" checked> Не сделанные задачи</p>
+        <p><input type="submit" value="Применить" onclick="ToDoListModule.applyFilters(isComplete = document.querySelector('input[name=\'filter_done\']:checked').value,
+                                                                               when = null)"></p>
+        <p><b>Отобразить задачи</b></p>
+        <p><input name="filter_deadline" type="radio" value="1" checked>С дедлайном завтра</p>
+        <p><input name="filter_deadline" type="radio" value="7"> С дедлайном через неделю</p>
+        <p><input type="submit" value="Применить" onclick="ToDoListModule.applyFilters(isComplete = null,
+                                                                               when = document.querySelector('input[name=\'filter_deadline\']:checked').value)"></p>
+        <a href="javascript:PopUpFilterHide()">Close</a>
+    </div>
+</div>
+<div class="add-popup" id="popup2">
+    <div class="add-popup-content">
+        <input type="text" id="myInput" placeholder="Title...">
+        <input type="date" id="deadline" placeholder="Deadline">
+        <input type="submit" value="Добавить" onclick="ToDoListModule.addTaskInList(document.getElementById('myInput').value,
+                                                                            document.getElementById('deadline').value,
+                                                                            document.getElementById('myUL'))">
+        <a href="javascript:PopUpNewTaskHide()">close</a>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>
+    $(document).ready(function(){
+        PopUpFilterHide();
+        PopUpNewTaskHide();
+    });
+    function PopUpFilterShow(){
+        $("#popup1").show();
+    }
+    function PopUpFilterHide(){
+        $("#popup1").hide();
+    }
+    function PopUpNewTaskShow(){
+        $("#popup2").show();
+    }
+    function PopUpNewTaskHide(){
+        $("#popup2").hide();
+        document.getElementById("myInput").value = "";
+        document.getElementById("deadline").value = "";
+    }
+</script>
+
+
+
+
+</body>
+</html>
