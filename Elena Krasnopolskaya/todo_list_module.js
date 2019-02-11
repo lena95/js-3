@@ -1,14 +1,17 @@
 var ToDoListModule = (function () {
     var myModule = {};
-    var list_tasks = [["Hit the gym", "2019-01-25", false], ["Read a book", "2019-02-05", true], ["Organize office", "2019-02-03", false], ["Do homework", "2019-01-23", true]];
+    var list_tasks = [{description: "Hit the gym", deadline: "2019-01-25", done: false},
+        {description: "Read a book", deadline: "2019-02-05", done: true},
+        {description: "Organize office", deadline: "2019-02-03", done: false},
+        {description: "Do homework", deadline: "2019-01-23", done: true}];
 
     var containerTasks;
     myModule.initContainer = function (container) {
         containerTasks = container
     };
 
-    addTask = function (nameTask, timeDeadline) {
-        list_tasks.push([nameTask, timeDeadline, false])
+    var addTask = function (nameTask, timeDeadline) {
+        list_tasks.push({description: nameTask, deadline: timeDeadline, done: false})
     };
 
     myModule.addTaskInList = function (nameTask, timeDeadline) {
@@ -17,7 +20,7 @@ var ToDoListModule = (function () {
         myModule.showTasks();
     };
 
-    deleteTask = function (id) {
+    var deleteTask = function (id) {
         if (id > -1) {
             list_tasks.splice(id, 1);
         }
@@ -44,16 +47,16 @@ var ToDoListModule = (function () {
         }
         var listForShow;
         if (isCompleteBool != null) {
-            listForShow = list_tasks.filter(task => task[2] == isCompleteBool);
+            listForShow = list_tasks.filter(task => task.done);
         }
         if (when != null) {
             var one_day = 1000 * 60 * 60 * 24;
             var currentTime = Date.now();
-            listForShow = list_tasks.filter(task => ((Date.parse(task[1]) - currentTime) / one_day) < diffDate);
+            listForShow = list_tasks.filter(task => ((Date.parse(task.deadline) - currentTime) / one_day) < diffDate);
         }
 
         clearContainer();
-        myModule.showTasks(list = listForShow)
+        myModule.showTasks(listForShow)
     };
 
     var clearContainer = function () {
@@ -64,12 +67,10 @@ var ToDoListModule = (function () {
 
     myModule.showTasks = function (list = list_tasks) {
         list.forEach(function (task) {
-            // for (var task in list) {
             var li = document.createElement("li");
-            var inputValue = task[0];
+            var inputValue = task.description;
             var t = document.createTextNode(inputValue);
-            var date = document.createElement("time");
-            var inputValueDate = task[1];
+            var inputValueDate = task.deadline;
             li.appendChild(t);
             li.appendChild(document.createTextNode(" Deadline: " + inputValueDate));
             if (inputValue === '') {
@@ -84,7 +85,7 @@ var ToDoListModule = (function () {
             li.setAttribute("id_task", list.indexOf(task));
             span.appendChild(txt);
             li.appendChild(span);
-            if (task[2])
+            if (task.done)
                 li.classList.toggle('checked');
             span.onclick = function () {
                 this.parentNode.onclick = function () {
@@ -99,10 +100,10 @@ var ToDoListModule = (function () {
         });
     };
 
-    taskComplete = function (task) {
+    var taskComplete = function (task) {
         console.log("li");
         task.classList.toggle('checked');
-        list_tasks[task.getAttribute("id_task")][2] = !list_tasks[task.getAttribute("id_task")][2];
+        list_tasks[task.getAttribute("id_task")].done = !list_tasks[task.getAttribute("id_task")].done;
     };
 
     return myModule
